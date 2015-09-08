@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import unittest
+from drf_gem.drf_gem import make_admin, make_views, make_urls, make_serializers, extractor
+
+
+class TestDrfGem(unittest.TestCase):
+
+    def setUp(self):
+        global outdir
+        outdir = 'drf_gem_build_test'
+
+    def test_extractor(self):
+        extractor('core/models.py')
+
+    def test_create_admin(self):
+        self.assertEqual(make_admin(outdir), True)
+
+    def test_create_views(self):
+        self.assertEqual(make_views(outdir), True)
+
+    def test_create_urls(self):
+        self.assertEqual(make_urls(outdir), True)
+
+    def test_create_serializers(self):
+        self.assertEqual(make_serializers(outdir), True)
+
