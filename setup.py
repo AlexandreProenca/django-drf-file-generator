@@ -40,8 +40,7 @@ def get_package_data(package):
                           for filename in filenames])
     return {package: filepaths}
 
-version = get_version('drf_gem')
-#version = '0.0.0'
+version = get_version('drf_gen')
 
 if sys.argv[-1] == 'publish':
     if os.system("pip freeze | grep wheel"):
@@ -57,7 +56,7 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     shutil.rmtree('dist')
     shutil.rmtree('build')
-    shutil.rmtree('drf_gem.egg-info')
+    shutil.rmtree('drf_gen.egg-info')
     sys.exit()
 
 
@@ -69,8 +68,8 @@ setup(
     description='Tool for generate files from models.py.',
     author='Alexandre Proença',
     author_email='alexandre.proenca@hotmail.com.br',  # SEE NOTE BELOW (*)
-    packages=get_packages('drf_gem'),
-    package_data=get_package_data('drf_gem'),
+    packages=get_packages('drf_gen'),
+    package_data=get_package_data('drf_gen'),
     install_requires=[],
     zip_safe=False,
     classifiers=[

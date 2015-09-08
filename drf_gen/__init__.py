@@ -7,8 +7,8 @@
     |__/          |___/                                   |___/
 """
 
-__title__ = 'Django DRF file generator'
-__version__ = '0.0.0'
+__title__ = 'Django DRF File Generator'
+__version__ = '0.1.0'
 __author__ = 'Alexandre Proença'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Alexandre Proença'
