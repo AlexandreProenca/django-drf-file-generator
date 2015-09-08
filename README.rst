@@ -28,7 +28,7 @@ Documentation: http://drf-gem.readthedocs.org/
 
 Usage
 -----
- Options:
+Options:
    
    **-m path/my/models.py**   required parameter, path to models.py file
    
