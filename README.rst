@@ -20,9 +20,9 @@ Django DRF File Generation provides a safe way to generate automatically django 
 
 Free software: MIT license
 
-GitHub: https://github.com/AlexandreProenca/drf-gem
+GitHub: https://github.com/AlexandreProenca/django-drf-file-generator
 
-Documentation: http://drf-gem.readthedocs.org/
+Documentation: http://django-drf-file-generator.readthedocs.org/
 
 
 
@@ -49,13 +49,13 @@ Options:
 
 Exemples:
   
-  $ python drf-gem -a -s -m path/my/models.py
+  $ python drf-gen -a -s -m path/my/models.py
   
-  $ python drf-gem -m path/my/models.py --views --serializers
+  $ python drf-gen -m path/my/models.py --views --serializers
   
-  $ python drf-gem -m path/my/models.py --clean
+  $ python drf-gen -m path/my/models.py --clean
   
-  $ python drf-gem -m path/my/models.py --All
+  $ python drf-gen -m path/my/models.py --All
   
 
 
@@ -63,7 +63,7 @@ Exemples:
 Installation
 ------------
 Easiest way to install this library is by using pip:
-    $ pip install drf-file-gem
+    $ pip install django-drf-file-generator
 
 Requirements
 ^^^^^^^^^^^^
