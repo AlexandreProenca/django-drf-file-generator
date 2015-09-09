@@ -1,13 +1,9 @@
 django-drf-file-generator
 =======
 
-.. image:: https://pypip.in/v/drf-gem/badge.png
-    :target: https://pypi.python.org/pypi/drf-gem
-    :alt: Latest PyPI version
-
-.. image:: https://travis-ci.org/AlexandreProenca/drf-gem.png
-   :target: https://travis-ci.org/AlexandreProenca/drf-gem
-   :alt: Latest Travis CI build status
+.. image:: https://travis-ci.org/AlexandreProenca/django-drf-file-generator.svg?branch=master
+    :target: https://travis-ci.org/AlexandreProenca/django-drf-file-generator.svg?branch=master
+    :alt: Latest Travis CI build status
 
 
            ╔╦╗ ┬┌─┐┌┐┌┌─┐┌─┐  ╔╦╗╦═╗╔═╗  ┌─┐┬  ┌─┐  ┌─┐┌─┐┌┐┌┌─┐┬─┐┌─┐┌┬┐┌─┐┬─┐
