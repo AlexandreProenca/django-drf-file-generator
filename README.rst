@@ -1,4 +1,4 @@
-django-drf-file-generator
+Django DRF File Generator
 =======
 
 .. image:: https://travis-ci.org/AlexandreProenca/django-drf-file-generator.svg?branch=master
