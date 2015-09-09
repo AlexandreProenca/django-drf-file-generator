@@ -69,21 +69,25 @@ def main(argv):
         make_admin(outputdir)
         if args.verbose:
             print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
+            sys.exit(0)
 
     if args.views:
         make_views(outputdir)
         if args.verbose:
             print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
+            sys.exit(0)
 
     if args.urls:
         make_urls(outputdir)
         if args.verbose:
             print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
+            sys.exit(0)
 
     if args.serializers:
         make_serializers(outputdir)
         if args.verbose:
             print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
+            sys.exit(0)
 
     if args.All:
         make_admin(outputdir)
@@ -95,6 +99,7 @@ def main(argv):
             print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
             print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
             print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
+            sys.exit(0)
 
     if args.Delete:
         op = raw_input('\033[91m Warning!!! '+outputdir+'directory will be destroyed!!! do you have sure? yes|not''\033[0m')
@@ -104,6 +109,7 @@ def main(argv):
                 print('\033[91m'+outputdir+' directory was destroyed!!!''\033[0m')
         else:
             print("OK nothing was destroyed.")
+            sys.exit(0)
 
 def extractor(path):
     """

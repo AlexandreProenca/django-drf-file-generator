@@ -73,7 +73,9 @@ setup(
     packages=get_packages('drf_gen'),
     package_data=get_package_data('drf_gen'),
     install_requires=[],
+    scripts=['drf_gen'],
     zip_safe=False,
+    keywords='django',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Web Environment',
