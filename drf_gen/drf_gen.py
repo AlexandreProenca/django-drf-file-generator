@@ -1,97 +1,133 @@
 # coding: utf-8
-# Extrator de modelos, este script le o arquivo que esta em core/models.py, extrai as classes e os campos dos modelos
-# e gera quatro arquivos: core/urls.py, core/admin.py, core/serializers.py/ core/views.py  
+# Extrator de modelos, este programa le o arquivo um arquivo no padrão django models.py, extrai as classes e os
+# campos dos modelos e e opçionalmente pode gera quatro arquivos: urls.py, admin.py, serializers.py e views.py
 # Autor: Alexandre Proença - linuxloco@gmail.com - alexandre.proenca@hotmail.com.br
 # Floripa Dom 18:11 10/05/2015
 # !/usr/bin/python
-import getopt
+from ConfigParser import RawConfigParser
+from argparse import ArgumentParser
 import sys
 import os
 import shutil
 
+
 MODELS = []
 
+
 def main(argv):
-    '''
+    """
     Method main, set output dir and call a specific function, as given in the options
     :param argv:
     :return: None
-    '''
+    """
+    config = RawConfigParser()
+    config.read('config.ini')
 
-    OUTDIR = 'drf_gem_build'
+    outputdir = config.get('outputdir', 'dir')
+    os.mkdir(outputdir) if not os.path.exists(outputdir) else outputdir
 
-    os.mkdir(OUTDIR) if not os.path.exists(OUTDIR) else OUTDIR
+    ap = ArgumentParser()
+    ap.add_argument('-vv', '--verbose',
+                    default=False,
+                    help='Increase verbosity.')
 
-    try:
-        myopts, args = getopt.getopt(sys.argv[1:], "m:hcAusavD",
-                                     ["help", "clean", "All", "urls", "serializers", "admin", "views"])
-    except getopt.GetoptError as e:
-        print("\n\033[93mOpsss... "'\033[91m'+str(e))
-        help()
-        sys.exit(2)
+    ap.add_argument('-m', '--model',
+                    required=True,
+                    action='store',
+                    dest='models_path',
+                    help='Path to your models.py file.')
 
-    for o, a in myopts:
+    ap.add_argument('-a', '--admin',
+                    action='store_true',
+                    help='Will create a admin.py file from your models.py.')
 
-        if o == '-m':
-            try:
-                extractor(a)
-            except:
-                print("\033[91mInvalid Path!---> \033[93m"+a)
-                sys.exit(2)
+    ap.add_argument('-v', '--views',
+                    action='store_true',
+                    help='Will create a views.py file from your models.py.')
 
-        elif o in ('-a', '--admin'):
-            make_admin(OUTDIR)
-            print("\033[91madmin.py genereted at!---> \033[93m" + OUTDIR + "/admin.py")
+    ap.add_argument('-s', '--serializers',
+                    action='store_true',
+                    help='Will create a serializers.py file from your models.py.')
 
-        elif o in ('-v', '--views'):
-            make_views(OUTDIR)
-            print("\033[91mviews.py genereted at!---> \033[93m" + OUTDIR + "/views.py")
+    ap.add_argument('-u', '--urls',
+                    action='store_true',
+                    help='Will create a urls.py file from your models.py.')
 
-        elif o in ('-u', '--urls'):
-            make_urls(OUTDIR)
-            print("\033[91murls.py genereted at!---> \033[93m" + OUTDIR + "/urls.py")
+    ap.add_argument('-A', '--All',
+                    action='store_true',
+                    help='Will create four files: urls.py, admin.py, views.py, serializers.py, from your models.py.')
 
-        elif o in ('-s', '--serializers'):
-            make_serializers(OUTDIR)
-            print("\033[91mserializers.py genereted at!---> \033[93m" + OUTDIR + "/serializers.py")
+    ap.add_argument('-D', '--Delete',
+                    action='store_true',
+                    help='\033[91m'+outputdir+' directory will be destroyed!!!''\033[0m')
 
-        elif o in ('-A', '--All'):
-            print("\033[91mAll files genereted at!---> \033[93m" + OUTDIR)
-            make_urls(OUTDIR)
-            make_views(OUTDIR)
-            make_admin(OUTDIR)
-            make_serializers(OUTDIR)
+    args = ap.parse_args()
 
-        elif o in ('-D', '--clean'):
-            shutil.rmtree(OUTDIR)
-            print("\033[91m"+OUTDIR+" directory was destroyed!!!")
+    extractor(args.models_path)
 
-        elif o in ('-h', '--help'):
-            help()
+    if args.admin:
+        make_admin(outputdir)
+        if args.verbose:
+            print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
 
+    if args.views:
+        make_views(outputdir)
+        if args.verbose:
+            print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
+
+    if args.urls:
+        make_urls(outputdir)
+        if args.verbose:
+            print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
+
+    if args.serializers:
+        make_serializers(outputdir)
+        if args.verbose:
+            print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
+
+    if args.All:
+        make_admin(outputdir)
+        make_views(outputdir)
+        make_urls(outputdir)
+        make_serializers(outputdir)
+        if args.verbose:
+            print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
+            print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
+            print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
+            print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
+
+    if args.Delete:
+        op = raw_input('\033[91m Warning!!! '+outputdir+'directory will be destroyed!!! do you have sure? yes|not''\033[0m')
+        if op == 'yes':
+            shutil.rmtree(outputdir)
+            if args.verbose:
+                print('\033[91m'+outputdir+' directory was destroyed!!!''\033[0m')
+        else:
+            print("OK nothing was destroyed.")
 
 def extractor(path):
-    '''
+    """
     Method receive the models path and extrac Class and fields.
     :param path:
     :return:True if everything went ok
-    '''
+    """
     f = open(path, "r")
     for line in f:
         if "models.Model" in line:
             MODELS.append({"classe": line.split()[1].split("(")[0]})
-            key = line.split()[1].split("(")[0]
-        if "models.C" in line or "models.D" in line or "models.F" in line or "models.T" in line or "models.I" in line or "models.O" in line or "models.B" in line:
+        if "models.C" in line or "models.D" in line or "models.F" in line or "models.T" in line or "models.I" in \
+                line or "models.O" in line or "models.B" in line:
             MODELS.append({"field": line.split()[0]})
     f.close()
+    return True
 
 
 def make_admin(outdir):
-    '''
+    """
     Method that create the admin.py file where indicated in parameter
     :param outdir:
     :return:True if everything went ok
-    '''
+    """
     f = open(outdir + "/admin.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from django.contrib import admin" + '\n')
@@ -116,11 +152,11 @@ def make_admin(outdir):
 
 
 def make_serializers(outdir):
-    '''
+    """
     Method that do serializer file from models.py got by extract method, where outdir is indicated
     :param outdir:
     :return:True if everything went ok
-    '''
+    """
     f = open(outdir + "/serializers.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from rest_framework import serializers" + '\n')
@@ -150,11 +186,11 @@ def make_serializers(outdir):
 
 
 def make_urls(outdir):
-    '''
+    """
     Method that do urls.py file from models.py got by extract method, where outdir is indicated
     :param outdir:
     :return:True if everything went ok
-    '''
+    """
     f = open(outdir + "/urls.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from django.conf.urls import patterns, url, include" + '\n')
@@ -179,11 +215,11 @@ def make_urls(outdir):
 
 
 def make_views(outdir):
-    '''
+    """
     Method that do views.py file from models.py got by extract method, where outdir is indicated
     :param outdir:
     :return:True if everything went ok
-    '''
+    """
     f = open(outdir + "/views.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from rest_framework.filters import DjangoFilterBackend" + '\n')
@@ -215,11 +251,11 @@ def make_views(outdir):
 
 
 def close_cap(path):
-    '''
+    """
     Method to do a workaround to close ] on files
     :param path:
     :return:True if everything went ok
-    '''
+    """
     arr = []
     arr_new = []
     f = open(path, "r")
@@ -238,39 +274,6 @@ def close_cap(path):
     f.close()
     return True
 
-
-def help():
-    '''
-    Method to help users to use command line commands
-    :param None:
-    :return:None
-    '''
-
-    cor = {
-    'ROXO' : '\033[95m',
-    'AZUL' : '\033[94m',
-    'VERDE' : '\033[92m',
-    'AMARELO' : '\033[93m',
-    'VERMELHO' : '\033[91m',
-    'BRANCO' : '\033[0m',
-    'BOLD' : '\033[1m',
-    'UNDERLINE' : '\033[4m'
-    }
-
-    print(cor['VERDE']+"Option:")
-    print(cor['AMARELO']+"       -m path/my/models.py  "+cor['BRANCO']+" required parameter, path to models.py file")
-    print(cor['AMARELO']+"       -a or --admin         "+cor['BRANCO']+" to create admin.py")
-    print(cor['AMARELO']+"       -v or --views          "+cor['BRANCO']+"to create views.py")
-    print(cor['AMARELO']+"       -u or --urls           "+cor['BRANCO']+"to create urls.py")
-    print(cor['AMARELO']+"       -s or --serializers    "+cor['BRANCO']+"to create serializers.py")
-    print(cor['AMARELO']+"       -A or --All            "+cor['BRANCO']+"to create urls.py, admin.py, views.py, serializers.py ")
-    print(cor['AMARELO']+"       -D or --clean          "+cor['VERMELHO']+"warning!!! this option will remove gem_build directory and all files inside")
-    print(cor['AMARELO']+"       -h or --help           "+cor['BRANCO']+"to show all options")
-    print(cor['VERDE']+"Exemples:")
-    print(cor['BRANCO']+"      #python drf-gem -a -s -m path/my/models.py")
-    print(cor['BRANCO']+"      #python drf-gem -m path/my/models.py --views --serializers")
-    print(cor['BRANCO']+"      #python drf-gem -m path/my/models.py --clean")
-    print(cor['BRANCO']+"      #python drf-gem -m path/my/models.py --All")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
