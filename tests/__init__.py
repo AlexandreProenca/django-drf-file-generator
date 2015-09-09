@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-__author__ = 'thod'
+__author__ = 'Alexandre Proença'

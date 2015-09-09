@@ -65,7 +65,9 @@ setup(
     version=version,
     url="https://github.com/AlexandreProenca/django-drf-file-generator",
     license='MIT',
-    description='Tool for generate files from models.py.',
+    description='Django DRF File Generator provides a safe way to generate automatically Django basic files like '
+                'url.py, serializers.py, admin.py, views.py, to use with djangorestframework, '
+                'the genereted files are based on your models.py',
     author='Alexandre Proença',
     author_email='alexandre.proenca@hotmail.com.br',  # SEE NOTE BELOW (*)
     packages=get_packages('drf_gen'),
