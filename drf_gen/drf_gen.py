@@ -6,6 +6,8 @@
 # !/usr/bin/python
 from ConfigParser import RawConfigParser
 from argparse import ArgumentParser
+from pkg_resources import resource_stream
+
 import sys
 import os
 import shutil
@@ -14,14 +16,14 @@ import shutil
 MODELS = []
 
 
-def main(argv):
+def main():
     """
     Method main, set output dir and call a specific function, as given in the options
     :param argv:
     :return: None
     """
     config = RawConfigParser()
-    config.read('config.ini')
+    config.readfp(resource_stream('drf_gen','config.ini'))
 
     outputdir = config.get('outputdir', 'dir')
     os.mkdir(outputdir) if not os.path.exists(outputdir) else outputdir
@@ -282,4 +284,4 @@ def close_cap(path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()

@@ -71,11 +71,18 @@ setup(
     author='Alexandre Proença',
     author_email='alexandre.proenca@hotmail.com.br',  # SEE NOTE BELOW (*)
     packages=get_packages('drf_gen'),
-    package_data=get_package_data('drf_gen'),
+    #package_data=get_package_data('drf_gen'),
     install_requires=[],
-    scripts=['drf_gen'],
+    entry_points={
+        'console_scripts': [
+            'drf_gen=drf_gen.drf_gen:main',
+        ],
+    },
     zip_safe=False,
     keywords='django',
+    package_data={
+        'drf_gen': ['*.ini'],
+    },
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Web Environment',
