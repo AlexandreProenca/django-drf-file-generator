@@ -13,7 +13,7 @@ sudo: false
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
   - pip install $DJANGO
-  - pip install -r dev-requirements.txt
+  - pip install -r requirements-dev.txt
   - pip install coveralls
   - pip freeze
 
