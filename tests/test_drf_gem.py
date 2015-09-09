@@ -6,6 +6,9 @@ from drf_gen.drf_gen import make_admin, make_views, make_urls, make_serializers,
 
 
 class TestDrfGen(unittest.TestCase):
+    '''
+    Test basic of main methods
+    '''
 
     def setUp(self):
         global outdir

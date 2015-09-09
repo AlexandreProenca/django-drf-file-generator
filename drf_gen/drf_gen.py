@@ -12,6 +12,11 @@ import shutil
 MODELS = []
 
 def main(argv):
+    '''
+    Method main, set output dir and call a specific function, as given in the options
+    :param argv:
+    :return: None
+    '''
 
     OUTDIR = 'drf_gem_build'
 
@@ -37,7 +42,6 @@ def main(argv):
         elif o in ('-a', '--admin'):
             make_admin(OUTDIR)
             print("\033[91madmin.py genereted at!---> \033[93m" + OUTDIR + "/admin.py")
-
 
         elif o in ('-v', '--views'):
             make_views(OUTDIR)
@@ -67,6 +71,11 @@ def main(argv):
 
 
 def extractor(path):
+    '''
+    Method receive the models path and extrac Class and fields.
+    :param path:
+    :return:True if everything went ok
+    '''
     f = open(path, "r")
     for line in f:
         if "models.Model" in line:
@@ -78,6 +87,11 @@ def extractor(path):
 
 
 def make_admin(outdir):
+    '''
+    Method that create the admin.py file where indicated in parameter
+    :param outdir:
+    :return:True if everything went ok
+    '''
     f = open(outdir + "/admin.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from django.contrib import admin" + '\n')
@@ -102,6 +116,11 @@ def make_admin(outdir):
 
 
 def make_serializers(outdir):
+    '''
+    Method that do serializer file from models.py got by extract method, where outdir is indicated
+    :param outdir:
+    :return:True if everything went ok
+    '''
     f = open(outdir + "/serializers.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from rest_framework import serializers" + '\n')
@@ -131,6 +150,11 @@ def make_serializers(outdir):
 
 
 def make_urls(outdir):
+    '''
+    Method that do urls.py file from models.py got by extract method, where outdir is indicated
+    :param outdir:
+    :return:True if everything went ok
+    '''
     f = open(outdir + "/urls.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from django.conf.urls import patterns, url, include" + '\n')
@@ -155,6 +179,11 @@ def make_urls(outdir):
 
 
 def make_views(outdir):
+    '''
+    Method that do views.py file from models.py got by extract method, where outdir is indicated
+    :param outdir:
+    :return:True if everything went ok
+    '''
     f = open(outdir + "/views.py", 'w')
     f.write("# coding: utf-8" + '\n')
     f.write("from rest_framework.filters import DjangoFilterBackend" + '\n')
@@ -186,6 +215,11 @@ def make_views(outdir):
 
 
 def close_cap(path):
+    '''
+    Method to do a workaround to close ] on files
+    :param path:
+    :return:True if everything went ok
+    '''
     arr = []
     arr_new = []
     f = open(path, "r")
@@ -202,9 +236,15 @@ def close_cap(path):
     f = open(path, "w")
     [f.write(line + '\n') for line in arr_new]
     f.close()
+    return True
 
 
 def help():
+    '''
+    Method to help users to use command line commands
+    :param None:
+    :return:None
+    '''
 
     cor = {
     'ROXO' : '\033[95m',
