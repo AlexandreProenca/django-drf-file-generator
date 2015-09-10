@@ -37,6 +37,8 @@ Django DRF File Generator
 
 
 
+-----------
+
 .. image:: https://img.shields.io/badge/english-ok-green.svg
         :target: https://img.shields.io/badge/english-ok-green.svg
         :alt: Documentation Status
