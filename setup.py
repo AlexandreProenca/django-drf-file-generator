@@ -56,7 +56,7 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     shutil.rmtree('dist')
     shutil.rmtree('build')
-    shutil.rmtree('drf_gen.egg-info')
+    shutil.rmtree('django_drf_file_generator.egg-info')
     sys.exit()
 
 
