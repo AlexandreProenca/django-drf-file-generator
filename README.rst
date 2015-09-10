@@ -54,6 +54,12 @@ Django DRF Gerador de Arquivos, fornece uma maneira segura para gerar automatica
 
 Documentation: http://django-drf-file-generator.readthedocs.org/
 
+Installation
+------------
+    Easiest way to install this library is by using pip:
+    
+    $ **pip install django-drf-file-generator**
+    
 
 Usage 
 -----
@@ -83,10 +89,6 @@ Exemples:
   
   $ python drf-gen -m path/my/models.py --All
   
-Installation
-------------
-Easiest way to install this library is by using pip:
-    $ pip install django-drf-file-generator
 
 Requirements
 ^^^^^^^^^^^^
