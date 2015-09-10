@@ -35,12 +35,7 @@ Django DRF File Generator
 Django DRF File Generator provides a safe way to generate automatically **Django basic files** like url.py, serializers.py, admin.py, views.py, to use with **djangorestframework**, the genereted files are based on your models.py
 
 
-Free software: MIT license
-
-GitHub: https://github.com/AlexandreProenca/django-drf-file-generator
-
 Documentation: http://django-drf-file-generator.readthedocs.org/
-
 
 
 Usage
