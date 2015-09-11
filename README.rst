@@ -2,37 +2,41 @@ Django DRF File Generator
 =======
 
 .. image:: https://travis-ci.org/AlexandreProenca/django-drf-file-generator.svg?branch=master
-        :target: https://travis-ci.org/AlexandreProenca/django-drf-file-generator.svg?branch=master
+        :target: https://travis-ci.org/AlexandreProenca/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/v/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/v/django-drf-file-generator.
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/dd/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/dd/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/pyversions/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/pyversions/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/l/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/l/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/wheel/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/wheel/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/format/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/format/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/implementation/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/implementation/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://img.shields.io/pypi/status/django-drf-file-generator.svg
-        :target: https://img.shields.io/pypi/status/django-drf-file-generator.svg
+        :target: https://pypi.python.org/pypi/django-drf-file-generator
 
 .. image:: https://api.codacy.com/project/badge/50515222d332430aba11bcbe76706f14
-        :target: https://api.codacy.com/project/badge/50515222d332430aba11bcbe76706f14
+        :target: https://www.codacy.com/app/linuxloco/django-drf-file-generator
 
 .. image:: https://readthedocs.org/projects/django-drf-file-generator/badge/?version=latest
-        :target: https://readthedocs.org/projects/django-drf-file-generator/?badge=latest
+        :target: http://django-drf-file-generator.readthedocs.org/en/latest/
+        :alt: Documentation Status
+
+.. image:: http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat
+        :target: http://stackshare.io/AlexandreProenca/django-drf-file-generator
         :alt: Documentation Status
 
 
