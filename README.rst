@@ -39,6 +39,10 @@ Django DRF File Generator
         :target: http://stackshare.io/AlexandreProenca/django-drf-file-generator
         :alt: Documentation Status
 
+.. image:: https://img.shields.io/badge/GITTER-join%20chat-green.svg
+        :target: https://gitter.im/AlexandreProenca/devfriends?utm_source=share-link&utm_medium=link&utm_campaign=share-link
+        :alt: Chat room
+
 
 
 -----------
