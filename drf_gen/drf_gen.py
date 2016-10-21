@@ -209,12 +209,27 @@ def make_urls(outdir):
     """
     Method that do urls.py file from models.py got by extract method, where outdir is indicated
     :param outdir:
+    # coding: utf-8
+from django.conf.urls import url, include
+from rest_framework import routers
+from . import views
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserView, 'list')
+router.register(r'equipes', views.EquipeView, 'list')
+router.register(r'jogos', views.JogoView, 'list')
+router.register(r'perfilapostas', views.PerfilApostaView, 'list')
+router.register(r'pushcontrols', views.PushControlView, 'list')
+
+urlpatterns = [
+    url(r'^', include(router.urls)),
+]
+
     :return:True if everything went ok
     """
     with open(outdir + "/urls.py", 'w') as f:
         f.write("# coding: utf-8" + '\n')
-        f.write("from django.conf.urls import patterns, url, include" + '\n')
-        f.write("from rest_framework.urlpatterns import format_suffix_patterns" + '\n')
+        f.write("from django.conf.urls import url, include" + '\n')
         f.write("from rest_framework import routers" + '\n')
         f.write("import views" + '\n')
         f.write("" + '\n')
@@ -223,11 +238,9 @@ def make_urls(outdir):
         for obj in OBJ_ARR:
             f.write("router.register(r'" + obj.name.lower() + "s', views." + obj.name + "View, 'list')" + '\n')
         f.write("" + '\n')
-        f.write("urlpatterns = patterns('',)" + '\n')
-        f.write("" + '\n')
-        f.write("urlpatterns = format_suffix_patterns(urlpatterns)" + '\n')
-        f.write("" + '\n')
-        f.write("urlpatterns += patterns('', url(r'^', include(router.urls)),)" + '\n')
+        f.write("urlpatterns = [" + '\n')
+        f.write("url(r'^', include(router.urls))," + '\n')
+        f.write("]" + '\n')
     return True
 
 
