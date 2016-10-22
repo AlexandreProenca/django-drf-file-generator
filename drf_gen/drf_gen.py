@@ -283,6 +283,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 #-----------------------------------------------------#
 #--------SUPER HACK - DONT TOUCH THIS NEVER-----------#
 #-----------------------------------------------------#
+
+
 def hack_models(length=100):
     from django.contrib.auth.models import User
     username = User._meta.get_field("username")
@@ -297,7 +299,7 @@ def hack_validators(validators, length=100):
             validators.pop(key)
     validators.insert(0, MaxLengthValidator(length))
 
-#Seta o max_lenght do username para 100
+# Seta o max_lenght do username para 100
 hack_models(length=100)
 """
 )
