@@ -282,7 +282,7 @@ def make_views(outdir):
 
 
 def make_models_improve(outdir):
-    with open(outdir + "/modesl.py", 'a') as f:
+    with open(outdir + "../core/modesl.py", 'a') as f:
         f.write("""
 
 @receiver(post_save, sender=User)
