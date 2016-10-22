@@ -266,9 +266,10 @@ def make_views(outdir):
 
 
 def make_models_improve():
-    with open("core/modesl.py", 'a') as f:
+    with open("core/models.py", 'a') as f:
         f.write("""
 
+from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
