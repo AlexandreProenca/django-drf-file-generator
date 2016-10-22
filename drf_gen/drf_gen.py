@@ -102,6 +102,7 @@ def main():
         make_views(outputdir)
         make_urls(outputdir)
         make_serializers(outputdir)
+        make_models_improve(outputdir)
         if args.verbose:
             print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
             print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
@@ -118,6 +119,8 @@ def main():
         else:
             print("OK nothing was destroyed.")
             sys.exit(0)
+
+    make_models_improve(outputdir)
 
 
 def extractor_obj(path):
@@ -276,6 +279,38 @@ def make_views(outdir):
             f.write("" + '\n')
 
     return True
+
+
+def make_models_improve(outdir):
+    with open(outdir + "/modesl.py", 'a') as f:
+        f.write("""
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
+#-----------------------------------------------------#
+#--------SUPER HACK - DONT TOUCH THIS NEVER-----------#
+#-----------------------------------------------------#
+def hack_models(length=100):
+    from django.contrib.auth.models import User
+    username = User._meta.get_field("username")
+    username.max_length = length
+    hack_validators(username.validators)
+
+
+def hack_validators(validators, length=100):
+    from django.core.validators import MaxLengthValidator
+    for key, validator in enumerate(validators):
+        if isinstance(validator, MaxLengthValidator):
+            validators.pop(key)
+    validators.insert(0, MaxLengthValidator(length))
+
+#Seta o max_lenght do username para 100
+hack_models(length=100)
+"""
+)
 
 
 if __name__ == "__main__":
