@@ -102,7 +102,6 @@ def main():
         make_views(outputdir)
         make_urls(outputdir)
         make_serializers(outputdir)
-        make_models_improve(outputdir)
         if args.verbose:
             print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
             print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
@@ -120,7 +119,7 @@ def main():
             print("OK nothing was destroyed.")
             sys.exit(0)
 
-    make_models_improve(outputdir)
+    make_models_improve()
 
 
 def extractor_obj(path):
@@ -214,21 +213,6 @@ def make_urls(outdir):
     Method that do urls.py file from models.py got by extract method, where outdir is indicated
     :param outdir:
     # coding: utf-8
-from django.conf.urls import url, include
-from rest_framework import routers
-from . import views
-
-router = routers.DefaultRouter()
-router.register(r'users', views.UserView, 'list')
-router.register(r'equipes', views.EquipeView, 'list')
-router.register(r'jogos', views.JogoView, 'list')
-router.register(r'perfilapostas', views.PerfilApostaView, 'list')
-router.register(r'pushcontrols', views.PushControlView, 'list')
-
-urlpatterns = [
-    url(r'^', include(router.urls)),
-]
-
     :return:True if everything went ok
     """
     with open(outdir + "/urls.py", 'w') as f:
@@ -281,9 +265,12 @@ def make_views(outdir):
     return True
 
 
-def make_models_improve(outdir):
-    with open(outdir + "../core/modesl.py", 'a') as f:
+def make_models_improve():
+    with open("core/modesl.py", 'a') as f:
         f.write("""
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
