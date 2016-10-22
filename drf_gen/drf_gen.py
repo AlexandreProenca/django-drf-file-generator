@@ -269,9 +269,11 @@ def make_models_improve():
     with open("core/models.py", 'a') as f:
         f.write("""
 
+from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
