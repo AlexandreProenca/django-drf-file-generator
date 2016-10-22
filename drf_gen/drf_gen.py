@@ -201,6 +201,7 @@ def make_serializers(outdir):
             f.write('\n' + "class {}Serializer(serializers.ModelSerializer):".format(obj.name) + '\n')
             f.write("    class Meta:" + '\n')
             f.write("        model = models.{}".format(obj.name) + '\n\n')
+            f.write("        fields = {}".format(tuple(obj.fields)) + '\n\n')
 
     return True
 

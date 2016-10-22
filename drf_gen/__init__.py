@@ -8,7 +8,7 @@
 """
 
 __title__ = 'Django DRF File Generator'
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 __author__ = 'Alexandre Proença'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Alexandre Proença'
