@@ -120,6 +120,7 @@ def main():
             sys.exit(0)
 
     make_models_improve()
+    make_views_improve()
 
 
 def extractor_obj(path):
@@ -227,7 +228,7 @@ def make_urls(outdir):
             f.write("router.register(r'" + obj.name.lower() + "s', views." + obj.name + "View, 'list')" + '\n')
         f.write("" + '\n')
         f.write("urlpatterns = [" + '\n')
-        f.write("url(r'^', include(router.urls))," + '\n')
+        f.write("    url(r'^', include(router.urls))," + '\n')
         f.write("]" + '\n')
     return True
 
@@ -301,6 +302,56 @@ def hack_validators(validators, length=100):
 
 # Seta o max_lenght do username para 100
 hack_models(length=100)
+"""
+)
+
+
+def make_views_improve():
+    with open("core/views.py", 'a') as f:
+        f.write("""
+
+
+class PasswordReset(GenericAPIView):
+    serializer_class = PasswordResetSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        email = self.request.data['email']
+
+        if not User.objects.filter(email=email):
+            return Response(data={"error": "Email " + email + " was not found"}, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        # Return the success message with OK HTTP status
+        return Response({"success": "Password reset e-mail has been sent."}, status=status.HTTP_200_OK)
+
+password_reset = PasswordReset.as_view()
+
+
+class ObtainAuthToken(APIView):
+    throttle_classes = ()
+    permission_classes = (AllowAny,)
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+    model = Token
+
+    def post(self, request):
+        serializer = AuthTokenSerializer(data=request.data)
+        if serializer.is_valid():
+            usuario = User.objects.get(username=request.data[unicode('username')])
+            token, created = Token.objects.get_or_create(user=usuario)
+            imagem = models.Perfil.objects.filter(usuario=usuario).values('imagem')[0]['imagem']
+            serializer = serializers.UserSerializer(usuario)
+            return Response(data={"token": token.key, "user": serializer.data, "image": imagem})
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+
+obtain_auth_token = ObtainAuthToken.as_view()
+
 """
 )
 
