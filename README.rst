@@ -100,9 +100,9 @@ Exemples:
 
 Requirements
 ^^^^^^^^^^^^
-    * Python 2.7, 3.x, pypy or pypy3
+    * Python 2.7, 3.4, pypy or pypy3
     * Django 1.8+ (there are plans to support older Django versions)
-    * Django REST Framework 2 or 3
+    * Django REST Framework 3.x
 
 
 Authors

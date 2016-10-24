@@ -5,10 +5,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+docs/
 # C extensions
 *.so
-
+tests/drf_gem_build_test/
 # Distribution / packaging
 .Python
 env/

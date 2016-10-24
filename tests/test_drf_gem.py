@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from drf_gen.drf_gen import make_admin, make_views, make_urls, make_serializers, extractor
+from drf_gen.drf_gen import make_admin, make_views, make_urls, make_serializers, extractor_obj
 
 
 class TestDrfGen(unittest.TestCase):
@@ -15,7 +15,8 @@ class TestDrfGen(unittest.TestCase):
         outdir = 'tests/drf_gem_build_test'
 
     def test_extractor(self):
-        extractor('tests/core/models.py')
+        extractor_obj('tests/core/models.py')
+        self.assertEqual(make_admin(outdir), True)
 
     def test_create_admin(self):
         self.assertEqual(make_admin(outdir), True)

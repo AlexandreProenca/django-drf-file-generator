@@ -7,11 +7,10 @@
 from ConfigParser import RawConfigParser
 from argparse import ArgumentParser
 from pkg_resources import resource_stream
-
+import config
 import sys
 import os
 import shutil
-
 
 OBJ_ARR = []
 
@@ -29,7 +28,7 @@ def main():
     :return: None
     """
     config = RawConfigParser()
-    config.readfp(resource_stream('drf_gen','config.ini'))
+    config.readfp(resource_stream('drf_gen', 'config.ini'))
 
     outputdir = config.get('outputdir', 'dir')
     os.mkdir(outputdir) if not os.path.exists(outputdir) else outputdir
@@ -71,56 +70,55 @@ def main():
 
     args = ap.parse_args()
 
-    extractor_obj(args.models_path)
-
-    if args.admin:
-        make_admin(outputdir)
-        if args.verbose:
-            print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
-            sys.exit(0)
-
-    if args.views:
-        make_views(outputdir)
-        if args.verbose:
-            print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
-            sys.exit(0)
-
-    if args.urls:
-        make_urls(outputdir)
-        if args.verbose:
-            print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
-            sys.exit(0)
-
-    if args.serializers:
-        make_serializers(outputdir)
-        if args.verbose:
-            print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
-            sys.exit(0)
-
-    if args.All:
-        make_admin(outputdir)
-        make_views(outputdir)
-        make_urls(outputdir)
-        make_serializers(outputdir)
-        if args.verbose:
-            print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
-            print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
-            print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
-            print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
-            sys.exit(0)
-
-    if args.Delete:
-        op = raw_input('\033[91m Warning!!! '+outputdir+'directory will be destroyed!!! do you have sure? yes|not ''\033[0m')
-        if op == 'yes':
-            shutil.rmtree(outputdir)
+    models = extractor_obj(args.models_path)
+    if models:
+        if args.admin:
+            make_admin(outputdir)
             if args.verbose:
-                print('\033[91m'+outputdir+' directory was destroyed!!!''\033[0m')
-        else:
-            print("OK nothing was destroyed.")
-            sys.exit(0)
+                print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
 
-    make_models_improve()
-    make_views_improve()
+        if args.views:
+            make_views(outputdir)
+            if args.verbose:
+                print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
+
+        if args.urls:
+            make_urls(outputdir)
+            if args.verbose:
+                print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
+
+        if args.serializers:
+            make_serializers(outputdir)
+            if args.verbose:
+                print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
+
+        if args.All:
+            make_admin(outputdir)
+            make_views(outputdir)
+            make_urls(outputdir)
+            make_serializers(outputdir)
+            if args.verbose:
+                print("\033[91madmin.py genereted at!---> \033[93m" + outputdir + "/admin.py")
+                print("\033[91mviews.py genereted at!---> \033[93m" + outputdir + "/views.py")
+                print("\033[91murls.py genereted at!---> \033[93m" + outputdir + "/urls.py")
+                print("\033[91serializers.py genereted at!---> \033[93m" + outputdir + "/serializers.py")
+
+        if args.Delete:
+            op = raw_input('\033[91m Warning!!! '+outputdir+'directory will be destroyed!!! do you have sure? yes|not ''\033[0m')
+            if op == 'yes':
+                shutil.rmtree(outputdir)
+                if args.verbose:
+                    print('\033[91m'+outputdir+' directory was destroyed!!!''\033[0m')
+                    sys.exit(0)
+            else:
+                print("OK nothing was destroyed.")
+                sys.exit(0)
+
+        make_models_improve()
+        sys.exit(0)
+    else:
+        print("can't read models.py, make sure that you was used a valid path/file.")
+        sys.exit(1)
 
 
 def extractor_obj(path):
@@ -161,10 +159,7 @@ def make_admin(outdir):
     :return:True if everything went ok
     """
     with open(outdir + "/admin.py", 'w') as f:
-        f.write("# coding: utf-8" + '\n')
-        f.write("from django.contrib import admin" + '\n')
-        f.write("import models" + '\n')
-        f.write("" + '\n')
+        f.write(config.ADMIN_HEAD)
         for obj in OBJ_ARR:
             f.write('\n' + "class {}(admin.ModelAdmin):".format(obj.name) + '\n')
             f.write("    list_display = {}".format(obj.fields))
@@ -183,27 +178,11 @@ def make_serializers(outdir):
     :return:True if everything went ok
     """
     with open(outdir + "/serializers.py", 'w') as f:
-        f.write("# coding: utf-8" + '\n')
-        f.write("from rest_framework import serializers" + '\n')
-        f.write("import models" + '\n')
-        f.write("from django.contrib.auth.models import User" + '\n')
-        f.write("" + '\n\n')
-        f.write("class UserSerializer(serializers.ModelSerializer):" + '\n')
-        f.write("    class Meta:" + '\n')
-        f.write("        model = User" + '\n')
-        f.write("        fields = ('id', 'username', 'email', 'password')" + '\n')
-        f.write("        write_only_fields = ('password',)" + '\n')
-        f.write("" + '\n')
-        f.write("    def update(self, attrs, instance=None):" + '\n')
-        f.write("        user = super(UserSerializer, self).update(attrs, instance)" + '\n')
-        f.write("        user.set_password(attrs['password'])" + '\n')
-        f.write("        return user" + '\n')
-        f.write("" + '\n')
-
+        f.write(config.SERIALIZERS_HEAD)
         for obj in OBJ_ARR:
             f.write('\n' + "class {}Serializer(serializers.ModelSerializer):".format(obj.name) + '\n')
             f.write("    class Meta:" + '\n')
-            f.write("        model = models.{}".format(obj.name) + '\n\n')
+            f.write("        model = models.{}".format(obj.name) + '\n')
             f.write("        fields = {}".format(tuple(obj.fields)) + '\n\n')
 
     return True
@@ -217,19 +196,10 @@ def make_urls(outdir):
     :return:True if everything went ok
     """
     with open(outdir + "/urls.py", 'w') as f:
-        f.write("# coding: utf-8" + '\n')
-        f.write("from django.conf.urls import url, include" + '\n')
-        f.write("from rest_framework import routers" + '\n')
-        f.write("import views" + '\n')
-        f.write("" + '\n')
-        f.write("router = routers.DefaultRouter()" + '\n')
-        f.write("router.register(r'users', views.UserView, 'list')" + '\n')
+        f.write(config.URLS_HEAD)
         for obj in OBJ_ARR:
             f.write("router.register(r'" + obj.name.lower() + "s', views." + obj.name + "View, 'list')" + '\n')
-        f.write("" + '\n')
-        f.write("urlpatterns = [" + '\n')
-        f.write("    url(r'^', include(router.urls))," + '\n')
-        f.write("]" + '\n')
+        f.write(config.URLS_TAIL)
     return True
 
 
@@ -240,19 +210,8 @@ def make_views(outdir):
     :return:True if everything went ok
     """
     with open(outdir + "/views.py", 'w') as f:
-        f.write("# coding: utf-8" + '\n')
-        f.write("from rest_framework.filters import DjangoFilterBackend" + '\n')
-        f.write("from rest_framework import viewsets" + '\n')
-        f.write("from django.contrib.auth.models import User" + '\n')
-        f.write("import models" + '\n')
-        f.write("import serializers" + '\n')
-        f.write("" + '\n\n')
-        f.write("class UserView(viewsets.ModelViewSet):" + '\n')
-        f.write("    serializer_class = serializers.UserSerializer" + '\n')
-        f.write("    queryset = User.objects.all()" + '\n')
-        f.write("    filter_backends = [DjangoFilterBackend]" + '\n')
-        f.write("    filter_fields = ['username', 'email']")
-        f.write("" + '\n')
+        f.write(config.VIEW_IMPORT)
+        f.write(config.VIEW_CLASS_USER)
 
         for obj in OBJ_ARR:
             f.write("" + '\n')
@@ -263,97 +222,13 @@ def make_views(outdir):
             f.write("    filter_fields = {}".format(obj.fields))
             f.write("" + '\n')
 
+        f.write(config.VIEW_FINAL)
     return True
 
 
 def make_models_improve():
     with open("core/models.py", 'a') as f:
-        f.write("""
-
-from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-
-@receiver(post_save, sender=User)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
-
-#-----------------------------------------------------#
-#--------SUPER HACK - DONT TOUCH THIS NEVER-----------#
-#-----------------------------------------------------#
-
-
-def hack_models(length=100):
-    from django.contrib.auth.models import User
-    username = User._meta.get_field("username")
-    username.max_length = length
-    hack_validators(username.validators)
-
-
-def hack_validators(validators, length=100):
-    from django.core.validators import MaxLengthValidator
-    for key, validator in enumerate(validators):
-        if isinstance(validator, MaxLengthValidator):
-            validators.pop(key)
-    validators.insert(0, MaxLengthValidator(length))
-
-# Seta o max_lenght do username para 100
-hack_models(length=100)
-"""
-)
-
-
-def make_views_improve():
-    with open("core/views.py", 'a') as f:
-        f.write("""
-
-
-class PasswordReset(GenericAPIView):
-    serializer_class = PasswordResetSerializer
-    permission_classes = (AllowAny,)
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        email = self.request.data['email']
-
-        if not User.objects.filter(email=email):
-            return Response(data={"error": "Email " + email + " was not found"}, status=status.HTTP_400_BAD_REQUEST)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-
-        # Return the success message with OK HTTP status
-        return Response({"success": "Password reset e-mail has been sent."}, status=status.HTTP_200_OK)
-
-password_reset = PasswordReset.as_view()
-
-
-class ObtainAuthToken(APIView):
-    throttle_classes = ()
-    permission_classes = (AllowAny,)
-    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
-    renderer_classes = (renderers.JSONRenderer,)
-    serializer_class = AuthTokenSerializer
-    model = Token
-
-    def post(self, request):
-        serializer = AuthTokenSerializer(data=request.data)
-        if serializer.is_valid():
-            usuario = User.objects.get(username=request.data[unicode('username')])
-            token, created = Token.objects.get_or_create(user=usuario)
-            imagem = models.Perfil.objects.filter(usuario=usuario).values('imagem')[0]['imagem']
-            serializer = serializers.UserSerializer(usuario)
-            return Response(data={"token": token.key, "user": serializer.data, "image": imagem})
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
-
-obtain_auth_token = ObtainAuthToken.as_view()
-
-"""
-)
+        f.write(config.MODEL_IMPROVE)
 
 
 if __name__ == "__main__":
