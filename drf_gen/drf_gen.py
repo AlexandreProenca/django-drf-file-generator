@@ -310,7 +310,6 @@ def make_views_improve():
     with open("core/views.py", 'a') as f:
         f.write("""
 
-
 class PasswordReset(GenericAPIView):
     serializer_class = PasswordResetSerializer
     permission_classes = (AllowAny,)
